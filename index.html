@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Frases de la Casa</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="idiomas">
+      <label><input type="checkbox" id="español" checked> Español</label>
+      <label><input type="checkbox" id="ingles" checked> Inglés</label>
+      <label><input type="checkbox" id="aleman" checked> Alemán</label>
+      <label><input type="checkbox" id="italiano" checked> Italiano</label>
+      <label><input type="checkbox" id="frances" checked> Francés</label>
+    </div>  
+    <button onclick="imprimirHabitacion()">Imprimir</button>
+    <div class="fontsize">
+      <label for="fontsize">Tamaño de letra:</label>
+      <input type="range" id="fontsize" min="8" max="30" value="16">
+    </div>
+    <div class="fontfamily">
+      <label for="fontfamily">Tipo de letra:</label>
+      <select id="fontfamily">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Georgia">Georgia</option>
+      </select>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </header>
+  
+
+
+
+  
+  
+  
+  
+  
+  
+
+  <div id="contenedor">
+
+
+<!-- Tabla HTML -->
+<table class="diccionario-tabla" id="tablaDiccionario">
+    <thead>
+        <tr id="encabezadosTabla">
+            <!-- Los encabezados se llenarán dinámicamente -->
+        </tr>
+    </thead>
+    <tbody id="contenidoTabla">
+        <!-- El contenido se llenará dinámicamente -->
+    </tbody>
+</table>  
+  
+    <div id="habitacion"></div>
+  </div>
+
+  <footer>
+    <div id="navegacion">
+      <button onclick="cambiarHabitacion('cocina')">Cocina</button>
+      <button onclick="cambiarHabitacion('comedor')">Comedor</button>
+      <button onclick="cambiarHabitacion('dormitorio')">Dormitorio</button>
+      <button onclick="cambiarHabitacion('baño')">Baño</button>
+      <button onclick="cambiarHabitacion('sala')">Sala</button>
+      <button onclick="cambiarHabitacion('oficina')">Oficina</button>
+      <button onclick="cambiarHabitacion('ciudad')">ciudad</button>
+      <button onclick="cambiarHabitacion('vacaciones')">vacaciones</button>
+      <button onclick="cambiarHabitacion('proyecto')">proyecto</button>
+      <button onclick="cambiarHabitacion('mercado')">mercado</button>
+      <button onclick="cambiarHabitacion('guarderia')">guarderia</button>
+      <button onclick="cambiarHabitacion('colegio')">colegio</button>
+      <button onclick="cambiarHabitacion('entrevistas_laborales')">Entrevista</button>	
+      <button onclick="cambiarHabitacion('pago_y_cobro')">Pagos</button>		  
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

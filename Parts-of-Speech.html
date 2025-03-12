@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parts of Speech</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 900px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3em;
+            color: #ff6347;
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.9em;
+            border: 3px solid;
+        }
+        .noun { border-color: #ffcc80; }
+        .pronoun { border-color: #b3e5fc; }
+        .verb { border-color: #ffab91; }
+        .adverb { border-color: #c5e1a5; }
+        .adjective { border-color: #f8bbd0; }
+        .article { border-color: #d7ccc8; }
+        .preposition { border-color: #a5d6a7; }
+        .conjunction { border-color: #ffe082; }
+        .interjection { border-color: #ce93d8; }
+        h2 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            color: #fff;
+        }
+        .noun h2 { background-color: #ffcc80; }
+        .pronoun h2 { background-color: #b3e5fc; }
+        .verb h2 { background-color: #ffab91; }
+        .adverb h2 { background-color: #c5e1a5; }
+        .adjective h2 { background-color: #f8bbd0; }
+        .article h2 { background-color: #d7ccc8; }
+        .preposition h2 { background-color: #a5d6a7; }
+        .conjunction h2 { background-color: #ffe082; }
+        .interjection h2 { background-color: #ce93d8; }
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 10px 0;
+        }
+        .examples {
+            display: flex;
+            justify-content: space-between;
+            text-align: left;
+        }
+        .examples div {
+            width: 45%;
+        }
+        .examples div span {
+            font-size: 0.8em;
+        }
+    </style>
+<style type="text/css">
+.grande { font-size: 60px; }
+</style>
+<script>
+// Escribir aqui el código Javascript
+</script>
+</head>
+<body>
+    <div class="container">
+        <h1>Parts of Speech</h1>
+        <div class="grid">
+            <div class="card noun">
+                <h2>Noun</h2>
+                <p>Person, Place or Thing</p>
+                <hr>
+                <div class="examples">
+                    <div>Person: <span>Boy, Girl, Teacher</span></div>
+                    <div>Place: <span>School, Park, Home</span></div>
+                    <div>Thing: <span>Apple, Backpack, Pencil</span></div>
+                </div>
+            </div>
+            <div class="card pronoun">
+                <h2>Pronoun</h2>
+                <p>Takes the Place of a Noun and May Replace a Name</p>
+                <hr>
+                <div class="examples">
+                    <div>I, He, She, You</div>
+                    <div>We, They, It, Me, Us</div>
+                </div>
+            </div>
+            <div class="card verb">
+                <h2>Verb</h2>
+                <p>Describes an Action or a State of Being</p>
+                <hr>
+                <div class="examples">
+                    <div>Action: <span>Run, Walk, Talk, Think</span></div>
+                    <div>State of Being: <span>Is, Was, Am, Are</span></div>
+                </div>
+            </div>
+            <div class="card adverb">
+                <h2>Adverb</h2>
+                <p>Tells How, When, Where, or To What Extent</p>
+                <hr>
+                <div class="examples">
+                    <div>How: <span>Perfectly</span></div>
+                    <div>When: <span>Yesterday</span></div>
+                    <div>Where: <span>Here</span></div>
+                    <div>Extent: <span>Completely</span></div>
+                </div>
+            </div>
+            <div class="card adjective">
+                <h2>Adjective</h2>
+                <p>Describes a Noun or Pronoun</p>
+                <hr>
+                <div class="examples">
+                    <div>Happy, More, Healthy, This</div>
+                    <div>Seven, That</div>
+                </div>
+            </div>
+            <div class="card article">
+                <h2>Article</h2>
+                <p>Comes Before a Noun in a Sentence and is a Special Kind of Adjective</p>
+                <hr>
+                <div class="examples">
+                    <div>A: <span>A Boy, A Girl, A Teacher</span></div>
+                    <div>An: <span>An Ant, An Orange, An Airplane</span></div>
+                    <div>The: <span>The Apple, The Pencil, The Cat</span></div>
+                </div>
+            </div>
+            <div class="card preposition">
+                <h2>Preposition</h2>
+                <p>Used with a Noun or Pronoun to Form a Phrase</p>
+                <hr>
+                <div class="examples">
+                    <div>At: <span>At Home</span></div>
+                    <div>From: <span>From There</span></div>
+                    <div>By: <span>By the Lake</span></div>
+                    <div>With: <span>With Us</span></div>
+                </div>
+            </div>
+            <div class="card conjunction">
+                <h2>Conjunction</h2>
+                <p>Joins Words and Groups of Words Within a Sentence</p>
+                <hr>
+                <div class="examples">
+                    <div>And, But, Or</div>
+                    <div>Also, Either, Except</div>
+                </div>
+            </div>
+            <div class="card interjection">
+                <h2>Interjection</h2>
+                <p>Strong Feeling or Reaction</p>
+                <hr>
+                <div class="examples">
+                    <div>Uh-Oh!, Hey!</div>
+                    <div>Yea!, Wow!, Oh-No!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body></html>

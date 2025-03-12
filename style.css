@@ -1,0 +1,113 @@
+#contenedor {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  perspective: 1000px; /* Para el efecto 3D */
+}
+
+#habitacion {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.5s;
+  transform-style: preserve-3d; 
+}
+
+
+.diccionario-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 150px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.diccionario-tabla th {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.diccionario-tabla td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.diccionario-tabla tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+
+.diccionario-tabla tr:hover {
+    background-color: #f0f0f0;
+}
+
+.seccion-titulo {
+    background-color: #e0e0e0;
+    font-weight: bold;
+}
+
+
+.cara {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; 
+}
+
+.cara.frente {
+  background-color: #f0f0f0;
+}
+
+.cara.atras {
+  background-color: #e0e0e0;
+  transform: rotateY(180deg);
+}
+
+/* Estilos para las frases */
+.frase {
+  margin-bottom: 60px;
+    margin-top: 60px;
+}
+
+.español { color: #222; } /* Gris oscuro */
+.ingles { color: #450000; } /* Rojo oscuro */
+.aleman { color: #003300; } /* Verde oscuro */
+.italiano { color: #000044; } /* Azul oscuro */
+.frances { color: #330033; } /* Morado oscuro */
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 10px;
+  text-align: center;
+  z-index: 10; /* Asegura que el encabezado esté encima del contenido */
+}
+
+header .fontsize {
+  margin-top: 10px; /* Espacio entre los checkboxes y el slider */
+}
+
+header .idiomas {
+  display: flex;
+  justify-content: center; /* Centra los checkboxes */
+  align-items: center;
+}
+
+header label {
+  margin: 0 10px; /* Espacio entre los checkboxes */
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f0f0f0; /* Color de fondo del footer */
+  padding: 10px;
+  text-align: center;
+}
