@@ -1,61 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Frases de la Casa</title>
-<link rel="stylesheet" href="style.css">
+  <title>Frases de la Casa</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-  <header>
-    <div class="idiomas">
-      <label><input type="checkbox" id="español" checked> Español</label>
-      <label><input type="checkbox" id="ingles" checked> Inglés</label>
-      <label><input type="checkbox" id="aleman" checked> Alemán</label>
-      <label><input type="checkbox" id="italiano" checked> Italiano</label>
-      <label><input type="checkbox" id="frances" checked> Francés</label>
-    </div>  
-    <button onclick="imprimirHabitacion()">Imprimir</button>
-    <div class="fontsize">
-      <label for="fontsize">Tamaño de letra:</label>
-      <input type="range" id="fontsize" min="8" max="30" value="16">
+<header>
+  <div class="header-container">
+    <!-- Logo o título -->
+    <div class="logo">
+      <h1>Learn Languages</h1>
     </div>
-    <div class="fontfamily">
-      <label for="fontfamily">Tipo de letra:</label>
-      <select id="fontfamily">
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Georgia">Georgia</option>
-      </select>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  </header>
-  
-
-
-
-  
-  
-  
-  
-  
-  
-
+    
+    <!-- Controles -->
+    <div class="controls">
+      
+      <!-- Checkboxes de idiomas -->
+      <div class="idiomas">
+        <label><input type="checkbox" id="español" checked> Español</label>
+        <label><input type="checkbox" id="ingles" checked> Inglés</label>
+        <label><input type="checkbox" id="alemán" checked> Alemán</label>
+        <label><input type="checkbox" id="italiano" checked> Italiano</label>
+        <label><input type="checkbox" id="frances" checked> Francés</label>
+      </div>
+      
+      <!-- Select para método de aprendizaje -->
+      <div class="metodo">
+        <label for="metodo">Método:</label>
+        <select id="metodo">
+          <option value="common">Vida Común</option>
+          <option value="reinforcement">100 Instrucciones</option>
+        </select>
+      </div>
+      
+      <!-- Botón Imprimir -->
+      <button onclick="imprimirHabitacion()" class="print-btn">Imprimir</button>
+      
+      <!-- Control de tamaño de letra -->
+      <div class="fontsize">
+        <label for="fontsize">Tamaño:</label>
+        <input type="range" id="fontsize" min="8" max="30" value="16">
+      </div>
+      
+      <!-- Control de tipo de letra -->
+      <div class="fontfamily">
+        <label for="fontfamily">Fuente:</label>
+        <select id="fontfamily">
+          <option value="Arial">Arial</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Georgia">Georgia</option>
+        </select>
+      </div>
+      
+    </div><!-- .controls -->
+  </div><!-- .header-container -->
+</header>  
   <div id="contenedor">
-
-
-<!-- Tabla HTML -->
-<table class="diccionario-tabla" id="tablaDiccionario">
-    <thead>
+    <!-- Tabla HTML -->
+    <table class="diccionario-tabla" id="tablaDiccionario">
+      <thead>
         <tr id="encabezadosTabla">
-            <!-- Los encabezados se llenarán dinámicamente -->
+          <!-- Los encabezados se llenarán dinámicamente -->
         </tr>
-    </thead>
-    <tbody id="contenidoTabla">
+      </thead>
+      <tbody id="contenidoTabla">
         <!-- El contenido se llenará dinámicamente -->
-    </tbody>
-</table>  
-  
+      </tbody>
+    </table>
+    
     <div id="habitacion"></div>
   </div>
 

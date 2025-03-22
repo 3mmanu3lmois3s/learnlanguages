@@ -1,8 +1,21 @@
+/* ============================= */
+/*         GENERAL LAYOUT        */
+/* ============================= */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif; /* O la que prefieras */
+  /* Si quieres, puedes establecer aquí un color de fondo global */
+}
+
+/* Contenedor principal (ajusta o quita width/height si quieres más responsividad) */
 #contenedor {
-  width: 800px;
-  height: 600px;
-  margin: 0 auto;
-  perspective: 1000px; /* Para el efecto 3D */
+  max-width: 800px;            /* Establece un ancho máximo */
+  width: 100%;                 /* Permite adaptarse en pantallas pequeñas */
+  margin: 120px auto 0 auto;   /* Centra horizontalmente y deja 120px arriba para el header fijo */
+  perspective: 1000px;
+  padding-bottom: 80px;        /* Espacio para que el footer fijo no tape el contenido */
 }
 
 #habitacion {
@@ -10,50 +23,56 @@
   height: 100%;
   position: relative;
   transition: transform 0.5s;
-  transform-style: preserve-3d; 
+  transform-style: preserve-3d;
 }
 
+/* ============================= */
+/*         TABLA DICCIONARIO     */
+/* ============================= */
 
 .diccionario-tabla {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 150px 0;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  width: 100%;
+  border-collapse: collapse;
+  margin: 150px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
 .diccionario-tabla th {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px;
-    text-align: left;
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px;
+  text-align: left;
 }
 
 .diccionario-tabla td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
 }
 
 .diccionario-tabla tr:nth-child(even) {
-    background-color: #f5f5f5;
+  background-color: #f5f5f5;
 }
 
 .diccionario-tabla tr:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 .seccion-titulo {
-    background-color: #e0e0e0;
-    font-weight: bold;
+  background-color: #e0e0e0;
+  font-weight: bold;
 }
 
+/* ============================= */
+/*        CARAS (3D EFECTO)      */
+/* ============================= */
 
 .cara {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden; 
+  backface-visibility: hidden;
 }
 
 .cara.frente {
@@ -65,49 +84,220 @@
   transform: rotateY(180deg);
 }
 
-/* Estilos para las frases */
+/* ============================= */
+/*        ESTILOS DE FRASES      */
+/* ============================= */
+
 .frase {
-  margin-bottom: 60px;
-    margin-top: 60px;
+  margin: 60px 0; /* Espacio superior e inferior */
 }
 
-.español { color: #222; } /* Gris oscuro */
-.ingles { color: #450000; } /* Rojo oscuro */
-.aleman { color: #003300; } /* Verde oscuro */
-.italiano { color: #000044; } /* Azul oscuro */
-.frances { color: #330033; } /* Morado oscuro */
+.español {  color: #222;   } /* Gris oscuro */
+.ingles  {  color: #450000;} /* Rojo oscuro */
+.aleman  {  color: #003300;} /* Verde oscuro */
+.italiano{  color: #000044;} /* Azul oscuro */
+.frances {  color: #330033;} /* Morado oscuro */
+
+/* ============================= */
+/*         HEADER NUEVO          */
+/* ============================= */
 
 header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #f0f0f0;
-  padding: 10px;
-  text-align: center;
-  z-index: 10; /* Asegura que el encabezado esté encima del contenido */
+  background-color: #fff;   /* Fondo blanco (más "limpio") */
+  border-bottom: 1px solid #ccc;
+  z-index: 10;
 }
 
-header .fontsize {
-  margin-top: 10px; /* Espacio entre los checkboxes y el slider */
-}
-
-header .idiomas {
+/* Contenedor principal del header */
+.header-container {
+  max-width: 1200px; /* Para centrar en pantallas grandes */
+  margin: 0 auto;
+  padding: 10px 15px;
   display: flex;
-  justify-content: center; /* Centra los checkboxes */
+  flex-wrap: wrap; /* Que los elementos salten de línea si no caben */
+  justify-content: space-between;
   align-items: center;
 }
 
-header label {
-  margin: 0 10px; /* Espacio entre los checkboxes */
+/* Logo o título */
+.logo h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #333;
 }
+
+/* Bloque de controles (idiomas, método, imprimir, tipografía, etc.) */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;          /* Espacio entre los elementos */
+  align-items: center;
+}
+
+/* IDIOMAS: checkboxes */
+.idiomas {
+  display: flex;
+  align-items: center;
+}
+.idiomas label {
+  margin-right: 10px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Select para método de aprendizaje */
+.metodo label {
+  margin-right: 5px;
+  font-size: 0.9rem;
+  color: #333;
+}
+.metodo select {
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Botón Imprimir */
+.print-btn {
+  background-color: #4CAF50; 
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.print-btn:hover {
+  background-color: #45a049;
+}
+
+/* Control de tamaño de letra */
+.fontsize {
+  display: flex;
+  align-items: center;
+}
+.fontsize label {
+  margin-right: 5px;
+  font-size: 0.9rem;
+  color: #333;
+}
+.fontsize input[type="range"] {
+  cursor: pointer;
+}
+
+/* Control de tipo de letra */
+.fontfamily {
+  display: flex;
+  align-items: center;
+}
+.fontfamily label {
+  margin-right: 5px;
+  font-size: 0.9rem;
+  color: #333;
+}
+.fontfamily select {
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* ============================= */
+/*           FOOTER              */
+/* ============================= */
 
 footer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #f0f0f0; /* Color de fondo del footer */
+  background-color: #f0f0f0;
   padding: 10px;
   text-align: center;
+  border-top: 1px solid #ccc; /* línea divisoria opcional */
+  z-index: 10;
+}
+
+/* ============================= */
+/*   BOTONES GENERALES           */
+/* ============================= */
+/* Botón principal (ej: "Imprimir") */
+.print-btn {
+  background-color: #4CAF50; /* Verde */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease-in-out;
+}
+.print-btn:hover {
+  background-color: #45a049;
+}
+
+/* Botones del footer en un tono gris */
+#navegacion button {
+  background-color: #e0e0e0; /* Gris claro */
+  color: #333;              /* Texto gris oscuro */
+  border: none;
+  margin: 0 5px;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease-in-out;
+}
+#navegacion button:hover {
+  background-color: #ccc; /* Un gris un poco más oscuro al hacer hover */
+}
+
+/* ============================= */
+/*   SELECT LISTS                */
+/* ============================= */
+.metodo select,
+.fontfamily select {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* ============================= */
+/*   INPUT RANGE                 */
+/* ============================= */
+input[type="range"] {
+  -webkit-appearance: none; /* Chrome/Safari */
+  width: 120px;
+  height: 4px;
+  border-radius: 2px;
+  background: #ccc;
+  outline: none;
+  cursor: pointer;
+  margin: 0 5px; /* Espacio horizontal */
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.5);
+}
+/* Firefox */
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #4CAF50;
+  border: 2px solid #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.5);
+  cursor: pointer;
 }
