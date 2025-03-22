@@ -1,6 +1,26 @@
 let currentMethod = "common";      // "common" o "reinforcement"
 let currentHabitacion = "cocina";    // Habitación por defecto para el método común
 
+// Mapeo de idiomas a códigos de idioma
+const langMap = {
+  "español": "es-ES",
+  "ingles": "en-US",
+  "alemán": "de-DE",
+  "italiano": "it-IT",
+  "frances": "fr-FR"
+};
+
+document.addEventListener('click', function(e) {
+  if(e.target.classList.contains('play-sound')) {
+    const text = e.target.getAttribute('data-text');
+    const lang = e.target.getAttribute('data-lang');
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = langMap[lang] || "en-US";
+    speechSynthesis.speak(utterance);
+  }
+});
+
+
 const instrucciones = {
   "reinforcement": [
     { "español": "Quítate el zapato", "ingles": "Take off your shoe", "alemán": "Zieh deinen Schuh aus", "italiano": "Togliti la scarpa", "frances": "Enlève ta chaussure" },
@@ -1341,24 +1361,206 @@ const palabras = {
 ]
 };
 
+///////////////////////////
+
+let mediaRecorder = null;
+let recordedChunks = [];
+// Estructura para guardar las grabaciones: recordings[lang][index] = Blob
+let recordings = {};
+
+async function startRecording(callback) {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    recordedChunks = [];
+    mediaRecorder.ondataavailable = event => {
+      if(event.data.size > 0) {
+        recordedChunks.push(event.data);
+      }
+    };
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+      callback(blob);
+    };
+    mediaRecorder.start();
+  } catch (error) {
+    console.error("Error al acceder al micrófono:", error);
+  }
+}
+
+function stopRecording() {
+  if (mediaRecorder) {
+    mediaRecorder.stop();
+  }
+}
+
+//////////////////////////
+
+document.addEventListener('click', function(e) {
+  // Botón de grabar
+  if(e.target.classList.contains('record')) {
+    const lang = e.target.getAttribute('data-lang');
+    const index = e.target.getAttribute('data-index');
+    // Ocultar botón de grabar y mostrar botón de detener
+    e.target.style.display = 'none';
+    const stopBtn = document.querySelector(`.stop-record[data-lang="${lang}"][data-index="${index}"]`);
+    stopBtn.style.display = 'inline-block';
+    // Iniciar grabación
+    startRecording(function(blob) {
+      // Guardar la grabación en recordings
+      if(!recordings[lang]) recordings[lang] = {};
+      recordings[lang][index] = blob;
+      // Ocultar botón de detener, mostrar botones de reproducir y borrar
+      stopBtn.style.display = 'none';
+      document.querySelector(`.play-recording[data-lang="${lang}"][data-index="${index}"]`).style.display = 'inline-block';
+      document.querySelector(`.delete-recording[data-lang="${lang}"][data-index="${index}"]`).style.display = 'inline-block';
+    });
+  }
+
+  // Botón de detener grabación
+  if(e.target.classList.contains('stop-record')) {
+    stopRecording();
+  }
+
+  // Botón de reproducir grabación
+  if(e.target.classList.contains('play-recording')) {
+    const lang = e.target.getAttribute('data-lang');
+    const index = e.target.getAttribute('data-index');
+    const blob = recordings[lang] ? recordings[lang][index] : null;
+    if(blob) {
+      const audioURL = URL.createObjectURL(blob);
+      const audio = new Audio(audioURL);
+      audio.play();
+    }
+  }
+
+  // Botón de borrar grabación
+  if(e.target.classList.contains('delete-recording')) {
+    const lang = e.target.getAttribute('data-lang');
+    const index = e.target.getAttribute('data-index');
+    if(recordings[lang] && recordings[lang][index]) {
+      delete recordings[lang][index];
+      // Ocultar los botones de reproducir y borrar y volver a mostrar el botón de grabar
+      e.target.style.display = 'none';
+      document.querySelector(`.play-recording[data-lang="${lang}"][data-index="${index}"]`).style.display = 'none';
+      document.querySelector(`.record[data-lang="${lang}"][data-index="${index}"]`).style.display = 'inline-block';
+    }
+  }
+});
+
+
+////////////////////////////////
+
+document.addEventListener('change', function(e) {
+  if(e.target.classList.contains('rating')) {
+    const value = e.target.value;
+    // Cambiar el color de fondo del select (o de un indicador adyacente)
+    if(value === "green") {
+      e.target.style.backgroundColor = "#c8e6c9"; // verde claro
+    } else if(value === "yellow") {
+      e.target.style.backgroundColor = "#fff9c4"; // amarillo claro
+    } else if(value === "red") {
+      e.target.style.backgroundColor = "#ffcdd2"; // rojo claro
+    } else {
+      e.target.style.backgroundColor = "";
+    }
+    // Aquí se guardará la calificación en localStorage o IndexedDB
+  }
+});
+
+
+///////////////////////////////////////////////////
 
 function mostrarInstrucciones() {
+  currentMethod = "reinforcement"; // Asegúrate de setear el método
   const habitacionDiv = document.getElementById('habitacion');
   habitacionDiv.innerHTML = ''; // Limpiar contenido anterior
 
   instrucciones["reinforcement"].forEach((instruccion, index) => {
     const instruccionDiv = document.createElement('div');
     instruccionDiv.classList.add('frase');
+
+    // Para cada idioma, incluimos el texto y los mismos controles
     instruccionDiv.innerHTML = `
-      <p class="español">${index + 1}. Español: ${instruccion.español}</p>
-      <p class="ingles">${index + 1}. Inglés: ${instruccion.ingles}</p>
-      <p class="alemán">${index + 1}. Alemán: ${instruccion.alemán}</p>
-      <p class="italiano">${index + 1}. Italiano: ${instruccion.italiano}</p>
-      <p class="frances">${index + 1}. Francés: ${instruccion.frances}</p>
+      <p class="español">
+        <strong>Español:</strong> ${index + 1}. ${instruccion.español}
+        <button class="play-sound" data-lang="español" data-text="${instruccion.español}">🔊</button>
+        <button class="record" data-lang="español" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="español" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="español" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="español" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="español" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Verde</option>
+          <option value="yellow">Amarillo</option>
+          <option value="red">Rojo</option>
+        </select>
+      </p>
+      
+      <p class="ingles">
+        <strong>Inglés:</strong> ${index + 1}. ${instruccion.ingles}
+        <button class="play-sound" data-lang="ingles" data-text="${instruccion.ingles}">🔊</button>
+        <button class="record" data-lang="ingles" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="ingles" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="ingles" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="ingles" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="ingles" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Green</option>
+          <option value="yellow">Yellow</option>
+          <option value="red">Red</option>
+        </select>
+      </p>
+      
+      <p class="alemán">
+        <strong>Alemán:</strong> ${index + 1}. ${instruccion.alemán}
+        <button class="play-sound" data-lang="alemán" data-text="${instruccion.alemán}">🔊</button>
+        <button class="record" data-lang="alemán" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="alemán" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="alemán" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="alemán" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="alemán" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Grün</option>
+          <option value="yellow">Gelb</option>
+          <option value="red">Rot</option>
+        </select>
+      </p>
+      
+      <p class="italiano">
+        <strong>Italiano:</strong> ${index + 1}. ${instruccion.italiano}
+        <button class="play-sound" data-lang="italiano" data-text="${instruccion.italiano}">🔊</button>
+        <button class="record" data-lang="italiano" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="italiano" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="italiano" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="italiano" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="italiano" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Verde</option>
+          <option value="yellow">Giallo</option>
+          <option value="red">Rosso</option>
+        </select>
+      </p>
+      
+      <p class="frances">
+        <strong>Francés:</strong> ${index + 1}. ${instruccion.frances}
+        <button class="play-sound" data-lang="frances" data-text="${instruccion.frances}">🔊</button>
+        <button class="record" data-lang="frances" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="frances" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="frances" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="frances" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="frances" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Vert</option>
+          <option value="yellow">Jaune</option>
+          <option value="red">Rouge</option>
+        </select>
+      </p>
     `;
     habitacionDiv.appendChild(instruccionDiv);
   });
 
+  // Actualiza la tabla de vocabulario
   actualizarTablaDiccionario();
 }
 
@@ -1374,23 +1576,86 @@ function cambiarHabitacion(habitacion) {
   habitacionDiv.innerHTML = ''; // Limpiar contenido anterior
 
   // Crear elementos para las frases (método Vida Común)
-  frases[habitacion].forEach(frase => {
+  frases[habitacion].forEach((frase, index) => {
     const fraseDiv = document.createElement('div');
     fraseDiv.classList.add('frase');
+    // Para cada idioma, incluimos el texto y los controles de audio y rating.
     fraseDiv.innerHTML = `
-      <p class="español">Español: ${frase.español}</p>
-      <p class="ingles">Inglés: ${frase.ingles}</p>
-      <p class="alemán">Alemán: ${frase.alemán}</p>
-      <p class="italiano">Italiano: ${frase.italiano}</p>
-      <p class="frances">Francés: ${frase.frances}</p>
+      <p class="español">
+        <strong>Español:</strong> ${frase.español}
+        <button class="play-sound" data-lang="español" data-text="${frase.español}">🔊</button>
+        <button class="record" data-lang="español" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="español" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="español" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="español" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="español" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Verde</option>
+          <option value="yellow">Amarillo</option>
+          <option value="red">Rojo</option>
+        </select>
+      </p>
+      <p class="ingles">
+        <strong>Inglés:</strong> ${frase.ingles}
+        <button class="play-sound" data-lang="ingles" data-text="${frase.ingles}">🔊</button>
+        <button class="record" data-lang="ingles" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="ingles" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="ingles" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="ingles" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="ingles" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Green</option>
+          <option value="yellow">Yellow</option>
+          <option value="red">Red</option>
+        </select>
+      </p>
+      <p class="alemán">
+        <strong>Alemán:</strong> ${frase.alemán}
+        <button class="play-sound" data-lang="alemán" data-text="${frase.alemán}">🔊</button>
+        <button class="record" data-lang="alemán" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="alemán" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="alemán" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="alemán" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="alemán" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Vert</option>
+          <option value="yellow">Jaune</option>
+          <option value="red">Rouge</option>
+        </select>
+      </p>
+      <p class="italiano">
+        <strong>Italiano:</strong> ${frase.italiano}
+        <button class="play-sound" data-lang="italiano" data-text="${frase.italiano}">🔊</button>
+        <button class="record" data-lang="italiano" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="italiano" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="italiano" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="italiano" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="italiano" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Verde</option>
+          <option value="yellow">Giallo</option>
+          <option value="red">Rosso</option>
+        </select>
+      </p>
+      <p class="frances">
+        <strong>Francés:</strong> ${frase.frances}
+        <button class="play-sound" data-lang="frances" data-text="${frase.frances}">🔊</button>
+        <button class="record" data-lang="frances" data-index="${index}">🎤</button>
+        <button class="stop-record" data-lang="frances" data-index="${index}" style="display:none;">⏹</button>
+        <button class="play-recording" data-lang="frances" data-index="${index}" style="display:none;">▶️</button>
+        <button class="delete-recording" data-lang="frances" data-index="${index}" style="display:none;">🗑️</button>
+        <select class="rating" data-lang="frances" data-index="${index}">
+          <option value="">--</option>
+          <option value="green">Vert</option>
+          <option value="yellow">Jaune</option>
+          <option value="red">Rouge</option>
+        </select>
+      </p>
     `;
     habitacionDiv.appendChild(fraseDiv);
   });
 
-  // Actualizar la tabla de diccionario usando currentHabitacion
   actualizarTablaDiccionario();
-
-  // Efecto de cambio de página
   habitacionDiv.style.transform = `rotateY(${habitacion === 'cocina' ? '0deg' : '360deg'})`;
 }
 
@@ -1550,8 +1815,20 @@ cambiarHabitacion('cocina');
 
 // Función para imprimir (requiere una librería externa como jsPDF)
 function imprimirHabitacion() {
-  const { jsPDF } = window.jspdf; // Importa jsPDF
+  // 1. Seleccionar todos los íconos y controles que deseas eliminar temporalmente
+  const audioButtons = document.querySelectorAll(
+    '.play-sound, .record, .stop-record, .play-recording, .delete-recording, .rating'
+  );
 
+  // 2. Guardar referencias de su padre y removerlos del DOM
+  const removedElements = [];
+  audioButtons.forEach(btn => {
+    removedElements.push({ parent: btn.parentNode, node: btn });
+    btn.parentNode.removeChild(btn);
+  });
+
+  // --- Generar el PDF (sin iconos en el DOM) ---
+  const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
   const habitacion = document.getElementById('habitacion');
   const frases = habitacion.querySelectorAll('.frase');
@@ -1564,37 +1841,39 @@ function imprimirHabitacion() {
       const idioma = checkbox.id;
       const fraseP = frase.querySelector(`p.${idioma}`);
 
-      if (checkbox.checked && fraseP.style.display !== 'none') {
-		  
-		 // Obtener el tipo de letra del elemento HTML
-      const fontFamily = window.getComputedStyle(fraseP).fontFamily;
+      // Verificar que exista y esté visible
+      if (checkbox.checked && fraseP && fraseP.style.display !== 'none') {
+        // Ajustar la fuente, color y tamaño como antes
+        const fontFamily = window.getComputedStyle(fraseP).fontFamily;
+        doc.setFont(fontFamily);
 
-      // Aplicar el tipo de letra al texto en el PDF
-      doc.setFont(fontFamily); 
-        // Obtener el tamaño de letra del elemento HTML
-        const fontSize = window.getComputedStyle(fraseP).fontSize; 
-        // Obtener el color del elemento HTML
-        const color = window.getComputedStyle(fraseP).color; 
+        const fontSize = window.getComputedStyle(fraseP).fontSize;
+        doc.setFontSize(parseFloat(fontSize));
 
-        const text = `${idioma.toUpperCase()}: ${fraseP.textContent}`;
+        const color = window.getComputedStyle(fraseP).color;
+        doc.setTextColor(color);
 
-        // Aplicar el tamaño de letra al texto en el PDF
-        doc.setFontSize(parseFloat(fontSize)); 
-        // Aplicar el color al texto en el PDF
-        doc.setTextColor(color); 
+        // 3. Usar SOLO el texto de la frase, sin "ESPAÑOL: ", etc.
+        const text = fraseP.textContent;
         doc.text(text, 10, y);
-        y += 05; // Incrementa la posición Y para la siguiente línea
+        y += 5;
       }
     });
 
-    y += 05; // Espacio adicional entre frases
-    if (y >= 275) { // Si se llega al final de la página
-      doc.addPage(); // Agrega una nueva página
-      y = 10; // Reinicia la posición Y
+    y += 5;
+    if (y >= 275) {
+      doc.addPage();
+      y = 10;
     }
   });
 
   doc.save('frases_habitacion.pdf');
+  // --- Fin de generación del PDF ---
+
+  // 4. Restaurar los elementos en el DOM
+  removedElements.forEach(item => {
+    item.parent.appendChild(item.node);
+  });
 }
 
 // Función para mostrar/ocultar frases según los idiomas seleccionados

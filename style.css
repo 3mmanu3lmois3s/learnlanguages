@@ -98,6 +98,49 @@ html, body {
 .italiano{  color: #000044;} /* Azul oscuro */
 .frances {  color: #330033;} /* Morado oscuro */
 
+
+/* Contenedor global de las frases (por ejemplo #habitacion), 
+   si deseas darle un fondo distinto a toda el área: */
+#habitacion {
+  background-color: #fafafa; /* Un gris muy claro */
+  padding: 20px;
+  /* El resto de estilos que ya tienes (transition, etc.) */
+  /* Si no quieres cambiar su fondo, puedes omitirlo */
+}
+
+/* Cada frase como una "tarjeta" */
+.frase {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px 15px;
+  /* box-shadow: ... elimina la sombra si no la quieres */
+}
+
+/* Títulos de idioma en negrita */
+.frase p strong {
+  display: inline-block;
+  width: 80px;    /* Espacio reservado para "Español:", "Inglés:", etc. */
+  color: #333;
+  font-weight: 600;
+}
+
+/* Ajusta la separación de los párrafos dentro de .frase */
+.frase p {
+  margin: 6px 0; /* Espacio vertical */
+}
+
+
+
+.frase:nth-child(even) {
+  background-color: #f9f9f9; /* Gris muy claro para pares */
+}
+.frase:nth-child(odd) {
+  background-color: #fff;    /* Blanco para impares */
+}
+
+
+
 /* ============================= */
 /*         HEADER NUEVO          */
 /* ============================= */
@@ -173,6 +216,19 @@ header {
 .print-btn:hover {
   background-color: #45a049;
 }
+
+@media print {
+  /* Oculta todos los botones e inputs relacionados con la grabación y reproducción */
+  .play-sound,
+  .record,
+  .stop-record,
+  .play-recording,
+  .delete-recording,
+  .rating {
+    display: none !important;
+  }
+}
+
 
 /* Control de tamaño de letra */
 .fontsize {
